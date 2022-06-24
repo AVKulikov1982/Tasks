@@ -1,0 +1,101 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  {% block title %}
+  <title>{% trans "Задачи" %}</title>
+  {% endblock title %}
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}" />
+</head>
+
+<body>
+  <div id="main">
+
+    <div id="header">
+      <div class="header__content">
+        {% if request.user.is_authenticated %}
+        <div style="display: flex;">
+{#          <p class="header__name">{% trans "Привет" %} {{ request.user.username }}!</p>#}
+          {% if request.user.is_superuser %}
+          <div style="margin-right: 5px;">
+            <button class="btn"><a href="/admin">{% trans "Админка" %}</a></button>
+          </div>
+          {% endif %}
+          <div style="margin-right: 5px;">
+            <button class="btn"><a href="/profile/{{ request.user.id }}">{% trans "Личный кабинет" %}</a></button>
+          </div>
+          <div>
+            <button class="btn"><a href="/logout">{% trans "Выйти" %}</a></button>
+          </div>
+        </div>
+        {% else %}
+        <div style="display: flex;">
+          <div style="margin-right: 5px;">
+            <button class="btn"><a href="/registration">{% trans "Регистрация" %}</a></button>
+          </div>
+          <div>
+            <button class="btn"><a href="/login">{% trans "Войти" %}</a></button>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <h1>Планировщик задач</h1>
+      <div class="navigation">
+        <div id="menubar">
+        {% block menu %}
+        <ul id="menu">
+          {% if request.user.is_authenticated %}
+          <li class="current"><a href="/">{% trans "ВСЕ ЗАДАЧИ" %}</a></li>
+          <li><a href="/my_tasks">{% trans "МОИ ЗАДАЧИ" %}</a></li>
+          <button class="btn"><a href="/add_task">{% trans "+ Добавить задачу" %}</a></button>
+          {% endif %}
+        </ul>
+        {% endblock menu %}
+      </div>
+      </div>
+    </div>
+      <div id="filter">
+        <svg class="search_label_icon" xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 30 30" width="30px" height="30px"><path d="M 13 3 C 7.4889971 3 3 7.4889971 3 13 C 3 18.511003 7.4889971 23 13 23 C 15.396508 23 17.597385 22.148986 19.322266 20.736328 L 25.292969 26.707031 A 1.0001 1.0001 0 1 0 26.707031 25.292969 L 20.736328 19.322266 C 22.148986 17.597385 23 15.396508 23 13 C 23 7.4889971 18.511003 3 13 3 z M 13 5 C 17.430123 5 21 8.5698774 21 13 C 21 17.430123 17.430123 21 13 21 C 8.5698774 21 5 17.430123 5 13 C 5 8.5698774 8.5698774 5 13 5 z"/></svg>
+        <p>фильтр</p>
+        <div class="form_filter">
+          <form>
+
+          </form>
+        </div>
+      </div>
+  </div>
+  <div id="site_content">
+    <div class="content__header">
+      <div class="content__header-unit content__header-checkbox">
+        <input id="checkbox_id" type="checkbox" name="checkbox">
+{#        <label for="checkbox_id"></label#}
+      </div>
+      <div class="content__header-unit content__header-title">
+        <p>название</p>
+      </div>
+      <div class="content__header-unit content__header-responsible">
+        <p>ответственный</p>
+      </div>
+      <div class="content__header-unit content__header-date_from">
+        <p>дата создания</p>
+      </div>
+      <div class="content__header-unit content__header-date_to">
+        <p>дедлайн</p>
+      </div>
+      <div class="content__header-unit content__header-status">
+        <p>статус</p>
+      </div>
+    </div >
+    {% block content %}
+      <p>здесь контент</p>
+    {% endblock content %}
+  </div>
+
+
+
+
+
+</body>
+</html>
