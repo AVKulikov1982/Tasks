@@ -1,0 +1,22 @@
+{% extends "main.html" %}
+{% load i18n %}
+{% block content %}
+<div id="text_content">
+  <h2>{% trans "Редактирование" %}</h2>
+    <form method="post" action="/profile/update/{{ request.user.id }}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% if avatar %}
+      <img src="/media/{{ avatar }}" alt="avatar">
+      {% endif %}
+      <p>{% trans "Username" %} - {{ user_form.username }}</p>
+      <p>{% trans "Имя" %} - {{ user_form.first_name }}</p>
+      <p>{% trans "Фамилия" %} - {{ user_form.last_name }}</p>
+      <p>{% trans "загрузить аватар" %}</p>
+      {{ avatar_form.as_p }}
+      <p>{% trans "Email" %} - {{ user_form.email }}</p>
+      <p>{% trans "Новый пароль" %} - {{ update_form.new_pass1 }}</p>
+      <p>{% trans "Новый пароль еще раз" %} - {{ update_form.new_pass2 }}</p>
+      <button class="btn" type="submit">{% trans "Редактировать" %}</button>
+    </form>
+</div>
+{% endblock content %}

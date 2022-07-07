@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.views import generic, View
 from django.utils.translation import gettext_lazy as _
 from .models import Profile, Avatar
-from .forms import RegisterForm, UpdateProfileForm, UploadFileForm
+from .forms import RegisterForm, UpdateProfileForm, UploadFileForm, ProfileRegisterForm
 from app_main.views import logger
 
 
@@ -77,20 +77,23 @@ class UpdateProfileView(View):
 def register(request):
 	if request.method == 'POST':
 		register_form = RegisterForm(request.POST)
-		print(register_form)
+		profile_register_form = ProfileRegisterForm(request.POST)
 		if register_form.is_valid():
 			user = register_form.save()
-			Profile.objects.create(user=user)
+			if profile_register_form.is_valid():
+				department = profile_register_form.cleaned_data.get('department')
+				Profile.objects.create(user=user, department=department)
 			username = register_form.cleaned_data.get('username')
 			row_password = register_form.cleaned_data.get('password1')
 
 			user = authenticate(username=username, password=row_password)
 			logger.info(f'Аутентификация пользователя {username}')
 			login(request, user)
-			return render(request, 'index.html')
+			return render(request, 'main.html')
 	else:
 		register_form = RegisterForm()
-	return render(request, 'registration.html', context={'register_form': register_form})
+		profile_register_form = ProfileRegisterForm()
+	return render(request, 'registration.html', context={'register_form': register_form, 'profile_register_form': profile_register_form})
 
 
 def profile(request, user_id):

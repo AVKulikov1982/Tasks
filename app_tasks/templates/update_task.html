@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update_task</title>
+</head>
+<body>
+  {% block content %}
+    <div class="container-xl task_container">
+      <h4 class="form_title">{% trans "Редактировать задачу" %}</h4>
+        <form method="post" action="/api/tasks/{{ pk }}/" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <p class="form_text"><span class="col-xl-3">{% trans "название" %}</span>{{ task_form_update.title }}</p>
+          <p class="form_text"><span class="col-xl-3">{% trans "ответственный" %}</span>{{ task_form_update.responsible }}</p>
+          <p class="form_text"><span class="col-xl-3">{% trans "дедлайн" %}</span>{{ task_form_update.date_date_to }}</p>
+           <p class="form_text"><span class="col-xl-3">{% trans "статус" %}</span>{{ task_form_update.status }}</p>
+          <button class="btn" type="submit">{% trans "Сохранить" %}</button>
+        </form>
+    </div>
+  {% endblock content %}
+</body>
+</html>>

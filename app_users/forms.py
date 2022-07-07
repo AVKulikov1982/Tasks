@@ -1,18 +1,23 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
+from app_users.models import Profile
 from django.utils.translation import gettext as _
 
 
 class RegisterForm(UserCreationForm):
-	first_name = forms.CharField(max_length=30, required=False, help_text=_('Имя'))
-	last_name = forms.CharField(max_length=30, required=False, help_text=_('Фамилия'))
-	email = forms.CharField(max_length=30, required=False, help_text=_('Мэйл'))
+	# first_name = forms.CharField(max_length=30, required=False, help_text=_('Имя'))
+	# last_name = forms.CharField(max_length=30, required=False, help_text=_('Фамилия'))
+	# email = forms.CharField(max_length=30, required=False, help_text=_('Мэйл'))
 
 	class Meta:
 		model = User
 		fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
+class ProfileRegisterForm(forms.ModelForm):
+	class Meta:
+		model = Profile
+		fields = ['department']
 
 class UpdateProfileForm(forms.ModelForm):
 	first_name = forms.CharField(max_length=30, required=False, help_text='Имя')

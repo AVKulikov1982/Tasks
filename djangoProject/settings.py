@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 	'app_users',
 	'app_tasks',
 	'rest_framework',
+	'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -143,8 +144,9 @@ REST_FRAMEWORK = {
 	'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
 	'PAGE_SIZE': 2,
 	'DEFAULT_PERMISSION_CLASSES': [
-			'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-		]
+		'rest_framework.permissions.IsAuthenticated',
+	],
+	'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 }
 
 LOGGING = {

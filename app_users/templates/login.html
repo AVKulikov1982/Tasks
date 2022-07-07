@@ -1,0 +1,15 @@
+{% extends "main.html" %}
+{% load i18n %}
+{% block title %}
+<title>{% trans "Страница входа" %}</title>
+{% endblock title %}
+{% block content %}
+<div id="text_content">
+<h2>{% trans "Страница входа" %}</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="btn" type="submit">{% trans "Логин" %}</button>
+</form>
+</div>
+{% endblock content %}

@@ -1,0 +1,21 @@
+{% extends "main.html" %}
+{% load i18n %}
+{% block content %}
+<div id="text_content">
+  <h2>{% trans "Ваши данные" %}</h2>
+  <div>
+    {% if avatar %}
+    <img src="/media/{{ avatar }}" alt="avatar">
+    {% endif %}
+    <p>{% trans "Username - " %}{{ request.user.username }}</p>
+    <p>{% trans "Имя - " %}{{ request.user.first_name }}</p>
+    <p>{% trans "Фамилия - " %}{{ request.user.last_name }}</p>
+    <p>{% trans "Email - " %}{{ request.user.email }}</p>
+    {% if request.user.profile.phone %}
+    <p>{% trans "Номер телефона - " %}{{ request.user.profile.phone }}</p>
+    {% endif %}
+  </div>
+  <p></p>
+  <button class="btn"><a href="/profile/update/{{ request.user.id }}">Редактировать профиль</a></button>
+</div>
+{% endblock content %}

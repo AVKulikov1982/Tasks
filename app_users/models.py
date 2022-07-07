@@ -17,6 +17,10 @@ class Profile(models.Model):
 	date_of_birth = models.DateTimeField(null=True, verbose_name=_('дата рождения'))
 	department = models.ForeignKey(Department, on_delete=models.CASCADE)
 
+	def __str__(self):
+		return self.user.username
+
+
 class Avatar(models.Model):
 	file = models.ImageField(null=True, blank=True, upload_to='avatars/')
 	user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
