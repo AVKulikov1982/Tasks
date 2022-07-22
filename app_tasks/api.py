@@ -2,7 +2,7 @@ import datetime
 
 from django.contrib.auth.models import User
 from .models import Task, Comment, Status
-from .forms import AddCommentForm, UpdateTaskForm, FilterForm
+from .forms import AddCommentForm, UpdateTaskForm, FilterForm, AddTaskForm
 from rest_framework.viewsets import ModelViewSet
 from .serializers import TaskSerializer
 from django_filters.rest_framework import DjangoFilterBackend
@@ -15,6 +15,7 @@ from django.db.models import Q
 
 
 def check_deadline():
+	"""Функция проверки даты окончания задачи и присвоения задаче соответствующего статуса """
 	date = datetime.date.today()
 
 	status = Status.objects.get(title='просрочена')
@@ -31,8 +32,9 @@ def check_deadline():
 
 
 class TaskList(ModelViewSet):
-
+	"""Представление списка задач в зависимости от запроса (get, post, put, delete)."""
 	serializer_class = TaskSerializer
+
 	queryset = Task.objects.all()
 	permission_classes_by_action = {'create': [IsAuthenticated],
 									'list': [IsAuthenticated],
@@ -59,24 +61,26 @@ class TaskList(ModelViewSet):
 		comment_form = AddCommentForm()
 		instance = self.get_object()
 		serializer = self.get_serializer(instance)
-		queryset = Task.objects.filter(id=kwargs['pk']).select_related('responsible')[0]
 		comments = Comment.objects.filter(task_id=instance.id).select_related('user')
 		responsibles = User.objects.all().values('id', 'username')
-
-
-		return Response({'task': queryset, 'comment_form': comment_form,
-						 'comments':comments, 'responsibles': responsibles, 'task_filter_form': task_filter_form},
-						template_name='task.html')
+		return Response({'task': serializer.data, 'comment_form': comment_form, 'comments':comments,
+						 'responsibles': responsibles, 'task_filter_form': task_filter_form}, template_name='task.html')
 
 	def create(self, request, *args, **kwargs):
+		task_form = AddTaskForm(request.POST)
 		task_filter_form = FilterForm()
-		print(request.data)
-		serializer = self.get_serializer(data=request.data)
-		serializer.is_valid(raise_exception=True)
-		self.perform_create(serializer)
-		headers = self.get_success_headers(serializer.data)
+		if task_form.is_valid():
+			title = task_form.cleaned_data.get('title')
+			responsible = task_form.cleaned_data.get('responsible')
+			date_date_to = task_form.cleaned_data.get('date_date_to')
+			status = task_form.cleaned_data.get('status')
+			Task.objects.create(title=title, responsible=responsible, date_date_to=date_date_to, status=status)
+		# serializer = self.get_serializer(data=request.POST)
+		# serializer.is_valid(raise_exception=True)
+		# self.perform_create(serializer)
+		# headers = self.get_success_headers(serializer.data)
 		tasks = Task.objects.all().select_related('responsible')
-		return Response({'tasks': tasks, 'task_filter_form': task_filter_form}, headers=headers, template_name='main.html')
+		return Response({'tasks': tasks, 'task_filter_form': task_filter_form}, template_name='main.html')
 
 	def update(self, request, *args, **kwargs):
 		task_filter_form = FilterForm()
@@ -105,3 +109,4 @@ class TaskList(ModelViewSet):
 		except KeyError:
 			# action is not set return default permission_classes
 			return [permission() for permission in self.permission_classes]
+

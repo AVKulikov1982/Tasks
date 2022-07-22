@@ -6,9 +6,6 @@ from app_tasks.forms import FilterForm
 from app_tasks.api import check_deadline
 import logging
 
-from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
-
 logger = logging.getLogger(__name__)
 
 # def valid_filter(t_filter, title):
@@ -19,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 
 class MainView(View):
-
+	"""Представление главной страницы"""
 	@staticmethod
 	def get(request):
 		check_deadline()

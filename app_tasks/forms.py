@@ -9,7 +9,7 @@ class AddTaskForm(forms.ModelForm):
                                      initial=format(datetime.date.today(),'%Y-%m-%d'), localize=True)
 	class Meta:
 		model = Task
-		fields = ['title', 'responsible', 'date_date_to', 'status']
+		fields = ['id', 'title', 'responsible', 'date_date_to', 'status', 'published']
 
 
 class AddCommentForm(forms.ModelForm):

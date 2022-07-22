@@ -12,16 +12,18 @@ from app_main.views import logger
 
 
 class UserLoginView(LoginView):
+	"""Представление страницы входа пользователя"""
 	template_name = 'login.html'
 	logger.info('Аутентификация пользователя')
 
 
 class UserLogoutView(LogoutView):
+	"""Представление страницы выхода пользователя"""
 	template_name = 'logout.html'
 
 
 class UpdateProfileView(View):
-
+	"""Представление страницы обновления профиля пользователя"""
 	@staticmethod
 	def get(request, user_id):
 		avatar = None
@@ -75,6 +77,7 @@ class UpdateProfileView(View):
 
 
 def register(request):
+	"""Представление страницы регистрации пользователя"""
 	if request.method == 'POST':
 		register_form = RegisterForm(request.POST)
 		profile_register_form = ProfileRegisterForm(request.POST)
@@ -97,6 +100,7 @@ def register(request):
 
 
 def profile(request, user_id):
+	"""Представление страницы профиля пользователя"""
 	avatar = None
 	if request.user.is_superuser:
 		Profile.objects.get_or_create(user_id=user_id)

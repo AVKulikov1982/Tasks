@@ -8,7 +8,7 @@ from django.http import HttpResponseBadRequest, HttpResponseForbidden
 
 
 class AddTask(View):
-
+	"""Представление страницы добавление задачи"""
 	@staticmethod
 	def get(request):
 		task_form = AddTaskForm()
@@ -20,7 +20,7 @@ class AddTask(View):
 
 
 class AddComment(View):
-
+	"""Представление страницы добавление комментария"""
 	@staticmethod
 	def post(request, pk):
 		if request.user.is_authenticated:
@@ -34,8 +34,9 @@ class AddComment(View):
 		else:
 			return HttpResponseBadRequest('войдите или зарегистрируйтесь')
 
-class StopTask(View):
 
+class StopTask(View):
+	"""Представление страницы закрытия задачи"""
 	@staticmethod
 	def get(request, pk):
 		if request.user.is_authenticated:
@@ -50,7 +51,7 @@ class StopTask(View):
 
 
 class ChangeResponsible(View):
-
+	"""Представление страницы смены ответственного по задаче"""
 	@staticmethod
 	def post(request, pk):
 		if request.user.is_authenticated:
@@ -69,14 +70,13 @@ class ChangeResponsible(View):
 
 
 class UpdateTask(View):
-
+	"""Представление страницы обновление задачи"""
 	@staticmethod
 	def get(request, pk):
 		task_filter_form = FilterForm()
 
 		if request.user.is_authenticated:
 			task = Task.objects.get(id=pk)
-			print(task.date_date_to)
 			task_form_update = UpdateTaskForm(instance=task)
 			return render(request, 'update_task.html', context={'task_form_update': task_form_update, 'pk': pk, 'task_filter_form': task_filter_form})
 		else:

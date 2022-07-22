@@ -5,6 +5,7 @@ from PIL import Image
 
 
 class Department(models.Model):
+	"""Модель Отдел"""
 	name = models.CharField(max_length=20, verbose_name=_('отдел'))
 
 	def __str__(self):
@@ -12,6 +13,7 @@ class Department(models.Model):
 
 
 class Profile(models.Model):
+	"""Модель Профиль пользователя"""
 	user = models.OneToOneField(User, on_delete=models.CASCADE)
 	phone = models.IntegerField(null=True, verbose_name=_('номер телефона'))
 	date_of_birth = models.DateTimeField(null=True, verbose_name=_('дата рождения'))
@@ -22,6 +24,7 @@ class Profile(models.Model):
 
 
 class Avatar(models.Model):
+	"""Модель Аватар пользователя"""
 	file = models.ImageField(null=True, blank=True, upload_to='avatars/')
 	user = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
 
